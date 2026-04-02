@@ -1,0 +1,14 @@
+DELIMITER //
+
+CREATE TRIGGER trigger_verif_note
+BEFORE INSERT ON note
+FOR EACH ROW
+BEGIN
+    IF NEW.valeur < 0 THEN
+        SET NEW.valeur = 0;
+    ELSEIF NEW.valeur > 100 THEN
+        SET NEW.valeur = 100;
+    END IF;
+END //
+
+DELIMITER ;
