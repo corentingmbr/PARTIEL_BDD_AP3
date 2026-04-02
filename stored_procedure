@@ -1,0 +1,24 @@
+DELIMITER //
+
+CREATE PROCEDURE ClassementEpreuve(IN p_id_epreuve INT)
+BEGIN
+    SELECT
+        a.nom,
+        a.prenom,
+        MAX(CalculNote.note_run) AS meilleure_note
+    FROM athlete a
+    JOIN run r ON a.id_athlete = r.id_athlete
+    JOIN (
+        SELECT
+            n.id_run,
+            SUM(n.valeur * c.poids) / SUM(c.poids) AS note_run
+        FROM note n
+        JOIN critere c ON n.id_critere = c.id_critere
+        GROUP BY n.id_run
+    ) AS CalculNote ON r.id_run = CalculNote.id_run
+    WHERE r.id_epreuve = p_id_epreuve
+    GROUP BY a.id_athlete, a.nom, a.prenom
+    ORDER BY meilleure_note DESC;
+END //
+
+DELIMITER ;
