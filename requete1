@@ -1,0 +1,12 @@
+SELECT
+    a.nom,
+    a.prenom,
+    e.nom AS nom_epreuve,
+    r.numero AS numero_run,
+    ROUND(SUM(n.valeur * c.poids) / SUM(c.poids), 2) AS note_finale
+FROM athlete a
+JOIN run r ON a.id_athlete = r.id_athlete
+JOIN epreuve e ON r.id_epreuve = e.id_epreuve
+JOIN note n ON r.id_run = n.id_run
+JOIN critere c ON n.id_critere = c.id_critere
+GROUP BY a.id_athlete, a.nom, a.prenom, e.id_epreuve, e.nom, r.id_run;

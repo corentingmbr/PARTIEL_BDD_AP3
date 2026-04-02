@@ -1,0 +1,10 @@
+SELECT 
+    a.nom,  
+    pa.nom AS pays
+FROM athlete a
+JOIN pays pa ON a.id_pays = pa.id_pays
+JOIN participation p ON a.id_athlete = p.id_athlete
+WHERE (p.id_athlete, p.id_epreuve) NOT IN (
+    SELECT id_athlete, id_epreuve 
+    FROM run
+);
